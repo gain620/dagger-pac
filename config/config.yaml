@@ -4,15 +4,15 @@ app:
 
 log:
   level: 'debug'
-  rollbar_env: 'clean-gin-template'
+  rollbar_env: 'dagger-pac-sample'
 
 database:
   type: mysql
   host: localhost
-  pool_max: 2
+  pool_max: 16
   port: 3306
+  name: dagger_pac_sample
+  location: Asia/Seoul
   # embedded in k8s secrets
   user: root
   pass: password
-  name: clean_gin_app
-  location: Asia/Seoul
