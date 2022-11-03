@@ -57,7 +57,7 @@ func build(repoUrl string, l logger.Interface) error {
 	}
 
 	// get `golang` image
-	golang := client.Container().From("golang:latest")
+	golang := client.Container().From("golang:1.18.8-alpine3.15")
 
 	// mount cloned repository into `golang` image
 	golang = golang.WithMountedDirectory("/src", src).WithWorkdir("/src")
