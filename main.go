@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"dagger-pac/config"
+	"dagger-pac/pkg/logger"
 	"dagger.io/dagger"
 	"fmt"
 	"os"
@@ -9,6 +11,14 @@ import (
 )
 
 func main() {
+	cfg, err := config.NewConfig()
+	if err != nil {
+		_ = fmt.Errorf("error: %v", err)
+		return
+	}
+	l := logger.LogurusSetup(cfg)
+	l.Debug("Hello Logger")
+
 	if len(os.Args) < 2 {
 		fmt.Println("Must pass in a Git repository to build")
 		os.Exit(1)
@@ -30,7 +40,13 @@ func build(repoUrl string) error {
 	if err != nil {
 		return err
 	}
-	defer client.Close()
+	defer func(client *dagger.Client) {
+		err := client.Close()
+		if err != nil {
+			_ = fmt.Errorf("error: %v", err)
+			return
+		}
+	}(client)
 
 	// clone repository with Dagger
 	repo := client.Git(repoUrl)
